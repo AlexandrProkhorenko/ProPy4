@@ -3,33 +3,38 @@
 
 
 
+
+
 nested_list = [
     ['a', 'b', 'c'],
     ['d', 'e', 'f','h',False],
     [1, 2, None],
 ]
 
-class Nested_iter:
-    def __init__(self,nested_list):
-        self.start = -1
-        self.end = len(nested_list)
+class FlatIterator:
+    def __init__(self, lst):
+        self.lst = lst
+        self.cursor = -1
+        self.list_len = len(self.lst)
 
     def __iter__(self):
+        self.cursor += 1
+        self.nest_cursor = 0
         return self
 
     def __next__(self):
-        self.start += 1
-        if self.start == self.end:
-            raise StopIteration
-        return self
-
-    def __str__(self):
-        return '\n'.join(str(elem) for elem in nested_list[self.start])
-
+        if self.nest_cursor == len(self.lst[self.cursor]):
+          iter(self)
+        if self.cursor == self.list_len:
+          raise StopIteration
+        self.nest_cursor += 1     
+        return self.lst[self.cursor][self.nest_cursor - 1]
 
 if __name__ == '__main__':
-    for item in Nested_iter(nested_list):
-        print(item)
+  flat_list = [item for item in FlatIterator(nested_list)]
+  print(flat_list)
+
+
 #Задача 2
 
 
